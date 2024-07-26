@@ -1,4 +1,4 @@
-# ClockApp
+# Clockered
 
 [Clockered App](https://66a3c226ab02b8009d6ef6c7--clockered.netlify.app/)
 
