@@ -1,0 +1,13 @@
+<div class="clock-container">
+    <div class="weather-container" *ngIf="weather">
+        <p>{{ weather.main.temp | number: '1.0-0'}} °C, {{ weather.weather[0].description | titlecase }}, {{ weather.name }}</p>
+    </div>
+    <h1>{{ currentTime }}</h1>
+    <p class="date" (click)="toggleCalender()" [class.hover]="showCalender">{{ currentDate }}</p>
+    <div class="calendar-container" *ngIf="showCalender">
+        <button class="close-btn" (click)="toggleCalender()">X</button>
+        <mat-calendar></mat-calendar>
+    </div>
+</div>
+
+<!-- <button (click)="flipDayNight()">Day/Night</button> -->
