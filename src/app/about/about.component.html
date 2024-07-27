@@ -1,0 +1,14 @@
+<div class="about-container">
+    <h2>About Me</h2>
+    <p>{{ thoughts }}</p>
+    <h3>Connect with me</h3>
+    <div class="social-links">
+      <ng-container *ngFor="let link of socialLinks">
+        <a [href]="link.url" target="_blank" mat-icon-button>
+          <mat-icon>{{ link.icon }}</mat-icon>
+          <!-- {{ link.name }} -->
+        </a>
+      </ng-container>
+    </div>
+  </div>
+  
