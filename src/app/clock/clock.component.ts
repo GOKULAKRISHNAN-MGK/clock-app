@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker'; 
 import { MatIconModule } from '@angular/material/icon';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WeatherService } from '../weather.service';
 @Component({
   selector: 'app-clock',
@@ -13,13 +12,13 @@ import { WeatherService } from '../weather.service';
     MatDatepickerModule, 
     MatNativeDateModule, 
     MatButtonModule, 
-    MatIconModule
-    /* BrowserAnimationsModule  */],
+    MatIconModule],
   templateUrl: './clock.component.html',
   styleUrl: './clock.component.css'
 })
 export class ClockComponent implements OnInit, OnDestroy {
   currentTime!: string;
+  dateTime!: any;
   currentDate!: string;
   showCalender = false;
   private stopUpdate = false;
@@ -32,6 +31,7 @@ export class ClockComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getLocationAndWeather();
     this.updateTimeAndBackground();
+    this.autoUpdateColor();
   }
 
   ngOnDestroy(): void {
@@ -40,23 +40,17 @@ export class ClockComponent implements OnInit, OnDestroy {
 
   private async updateTimeAndBackground(): Promise<void> {
     while (!this.stopUpdate) {
-      this.updateTime();
+      this.updateDateTime();
       this.updateBackground();
       await this.delay(1000);
     }
   }
 
-  updateTime() {
-    const now = new Date();
-    this.currentTime = now.toLocaleTimeString();
-    this.currentDate = this.formatDate(now);
+  updateDateTime() {
+    this.dateTime = new Date();
   }
 
   updateBackground() {
-    const now = new Date();
-    const hour = now.getHours();
-    //const isDayTime = hour >= 6 && hour < 18;
-
     if(this.isDayTime) {
       this.renderer.setStyle(this.el.nativeElement, 'background-image', 'url(day.png)');
       this.renderer.setStyle(this.el.nativeElement, 'color', '#000');
@@ -101,6 +95,12 @@ export class ClockComponent implements OnInit, OnDestroy {
 
   private delay(ms: number): Promise<void> {
     return new Promise(resolve=>setTimeout(resolve, ms));
+  }
+
+  autoUpdateColor() {
+    const now = new Date();
+    const hour = now.getHours();
+    this.isDayTime = hour >= 6 && hour < 18;
   }
 
   toggleCalender() {
