@@ -1,11 +1,18 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { ClockComponent } from './clock/clock.component';
+import { routes } from './app.routes';
+import { MatTabsModule } from '@angular/material/tabs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ClockComponent],
+  imports: [
+    RouterModule,
+    ClockComponent,
+    MatTabsModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

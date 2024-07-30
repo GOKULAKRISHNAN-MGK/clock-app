@@ -2,12 +2,15 @@
     <div class="weather-container" *ngIf="weather">
         <p>{{ weather.main.temp | number: '1.0-0'}} °C, {{ weather.weather[0].description | titlecase }}, {{ weather.name }}</p>
     </div>
-    <h1>{{ currentTime }}</h1>
-    <p class="date" (click)="toggleCalender()" [class.hover]="showCalender">{{ currentDate }}</p>
-    <div class="calendar-container" *ngIf="showCalender">
-        <button class="close-btn" (click)="toggleCalender()">X</button>
-        <mat-calendar></mat-calendar>
+    <div class="time-container">
+        <h1>{{ dateTime | date:'mediumTime'}}</h1>
+        <p class="date" (click)="toggleCalender()" [class.hover]="showCalender">{{ dateTime | date: 'fullDate' }}</p>
+        <div class="calendar-container" *ngIf="showCalender">
+            <button mat-icon-button class="close-btn" (click)="toggleCalender()">X</button>
+            <mat-calendar></mat-calendar>
+        </div>
     </div>
+    <button mat-icon-button class="toggle-mode" (click)="flipDayNight()">
+        <mat-icon>{{ isDayTime ? 'brightness_7': 'brightness_3' }}</mat-icon>
+    </button>
 </div>
-
-<!-- <button (click)="flipDayNight()">Day/Night</button> -->
