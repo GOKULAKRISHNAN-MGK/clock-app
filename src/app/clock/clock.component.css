@@ -74,3 +74,26 @@ h1 {
     align-items: center;
     justify-content: center;
 }
+
+.task-list {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding-right: 10px;
+}
+
+mat-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    margin-top: 10px;
+}
+
+button.mat-icon-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}

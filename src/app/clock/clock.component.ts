@@ -5,6 +5,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker'; 
 import { MatIconModule } from '@angular/material/icon';
 import { WeatherService } from '../weather.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
+import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
+import { MatList, MatListItem } from '@angular/material/list';
 @Component({
   selector: 'app-clock',
   standalone: true,
@@ -12,21 +16,23 @@ import { WeatherService } from '../weather.service';
     MatDatepickerModule, 
     MatNativeDateModule, 
     MatButtonModule, 
-    MatIconModule],
+    MatIconModule,
+    MatList,
+    MatListItem
+  ],
   templateUrl: './clock.component.html',
   styleUrl: './clock.component.css'
 })
 export class ClockComponent implements OnInit, OnDestroy {
-  currentTime!: string;
   dateTime!: any;
-  currentDate!: string;
   showCalender = false;
   private stopUpdate = false;
   isDayTime!: boolean;
-
   weather: any;
+  tasks: { name: string; targetDate: Date}[] = [];
+  selectedDate: Date = new Date();
 
-  constructor(private renderer: Renderer2, private el: ElementRef, private weatherService: WeatherService) {}
+  constructor(private renderer: Renderer2, private el: ElementRef, private weatherService: WeatherService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getLocationAndWeather();
@@ -74,17 +80,6 @@ export class ClockComponent implements OnInit, OnDestroy {
     }
   }
 
-  formatDate(date: Date): string {
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    };
-
-    return date.toLocaleDateString(undefined, options);
-  }
-
   flipDayNight() {
     if(this.isDayTime) {
       this.isDayTime=false;
@@ -105,6 +100,45 @@ export class ClockComponent implements OnInit, OnDestroy {
 
   toggleCalender() {
     this.showCalender = !this.showCalender;
+  }
+
+  openCalendar(): void {
+    const dialogRef = this.dialog.open(CalendarDialogComponent, {
+      width: '400px',
+      data: { tasks: this.tasks, selectedDate: this.selectedDate }
+    });
+
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result) {
+        this.selectedDate = result.selectedDate;
+        this.tasks = result.tasks;
+      }
+    });
+  }
+
+  openTaskDialog(): void {
+    const dialogRef = this.dialog.open(TaskDialogComponent, {
+      width: '300px',
+      data: { date: this.selectedDate }
+    });
+
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result) {
+        this.tasks.push({ name: result.name, targetDate: result.targetDate })
+      }
+    });   
+  }
+
+  getTasksForDate(date: Date): {name: string; targetDate: Date}[] {
+    return this.tasks.filter(task=>{this.isSameDate(task.targetDate, date)})
+  }
+
+  private isSameDate(date1: Date, date2: Date): boolean {
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
   }
 
 }

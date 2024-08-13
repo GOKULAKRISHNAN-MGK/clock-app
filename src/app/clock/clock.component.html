@@ -4,11 +4,19 @@
     </div>
     <div class="time-container">
         <h1>{{ dateTime | date:'mediumTime'}}</h1>
-        <p class="date" (click)="toggleCalender()" [class.hover]="showCalender">{{ dateTime | date: 'fullDate' }}</p>
-        <div class="calendar-container" *ngIf="showCalender">
+        <p class="date" (click)="openCalendar()" [class.hover]="showCalender">{{ dateTime | date: 'fullDate' }}</p>
+        <!-- <div class="calendar-container" *ngIf="showCalender">
             <button mat-icon-button class="close-btn" (click)="toggleCalender()">X</button>
             <mat-calendar></mat-calendar>
-        </div>
+        </div> -->
+    </div>
+    <div class="task-list">
+        <mat-list>
+            <ng-container *ngFor="let task of getTasksForDate(selectedDate)">
+                <mat-list-item>{{ task.name }} - {{ task.targetDate | date: 'fullDate' }}</mat-list-item>
+            </ng-container>
+        </mat-list>
+        <button mat-fab-color="primary" (click)="openTaskDialog()">+</button>
     </div>
     <button mat-icon-button class="toggle-mode" (click)="flipDayNight()">
         <mat-icon>{{ isDayTime ? 'brightness_7': 'brightness_3' }}</mat-icon>
